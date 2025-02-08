@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Buddy</title>
+
+    <!-- Ensure the favicon is linked correctly -->
+    <link rel="icon" href="map.png" type="image/png">
+
+
+    <link rel="stylesheet" href="./CSS.css">
+    <link rel="stylesheet" href="home.css">
+</head>
+
+<body>
+    <div class="banner">
+        <img src="banner copy.png" alt="">
+    </div>
+    <div class="events-page">
+        <div class="sports-event">
+            <iframe src="DATABASE.html" width="100%" height="100%"></iframe>
+        </div>
+        <div class="sports-form">
+            <div class="inputBox">
+                <label>Date <input id="SNO" type="text" placeholder="Enter Date" required>
+                    Event Category<input id="sports_category" type="text" placeholder="Enter The Event Category" required>
+                    Event Name <input id="sports_Name" type="text" placeholder="Enter The Event Name" required></label>
+            </div>
+
+            <hr>
+            <button id="ADD">ADD</button>
+            <button id="SELECT">SELECT</button>
+            <button id="UPDATE">UPDATE</button>
+            <button id="DELETE">DELETE</button>
+        </div>
+    </div>
+
+    <!-- SweetAlert2 Script -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            // apiKey: "Enter your API key here",
+            authDomain: "sports-buddy-eab63.firebaseapp.com",
+            databaseURL: "https://sports-buddy-eab63-default-rtdb.firebaseio.com",
+            projectId: "sports-buddy-eab63",
+            storageBucket: "sports-buddy-eab63.appspot.com",
+            messagingSenderId: "49982895548",
+            appId: "1:49982895548:web:b7ad502f9177abc6bf67b9"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        import { getDatabase, ref, get, set, child, update, remove }
+            from "https://www.gstatic.com/firebasejs/10.12.1/firebase-database.js";
+
+        const db = getDatabase();
+        var SNO = document.getElementById("SNO");
+        var sports_category = document.getElementById("sports_category");
+        var sports_Name = document.getElementById("sports_Name");
+
+        var ADD = document.getElementById("ADD");
+        var SELECT = document.getElementById("SELECT");
+        var UPDATE = document.getElementById("UPDATE");
+        var DELETE = document.getElementById("DELETE");
+
+        // --------------------------functions---------------
+        function IN_DATA() {
+            if (SNO.value.trim() === "" || sports_category.value.trim() === "" || sports_Name.value.trim() === "") {
+                Swal.fire({
+                    title: "Warning!",
+                    text: "All fields are required!",
+                    icon: "warning",
+                    confirmButtonColor: "#ffa500"
+                });
+                return;
+            }
+
+            set(ref(db, "TheNumber/" + SNO.value), {
+                SNO: SNO.value,
+                sports_category: sports_category.value,
+                sports_Name: sports_Name.value
+            })
+                .then(() => {
+                    Swal.fire({
+                        title: "Success!",
+                        text: "Data has been stored successfully.",
+                        icon: "success",
+                        confirmButtonColor: "#28a745"
+                    });
+
+                    // Optionally, clear fields after successful submission
+                    SNO.value = "";
+                    sports_category.value = "";
+                    sports_Name.value = "";
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Failed to store data. " + error.message,
+                        icon: "error",
+                        confirmButtonColor: "#dc3545"
+                    });
+                });
+        }
+
+        // ------------------SELECTED DATA----------
+        function select_data() {
+            const dbRef = ref(db);
+            get(child(dbRef, "TheNumber/" + SNO.value)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    sports_category.value = snapshot.val().sports_category;
+                    sports_Name.value = snapshot.val().sports_Name;
+                } else {
+                    // SweetAlert for no data found
+                    Swal.fire({
+                        title: 'Not Found!',
+                        text: 'No data found for the given SNO.',
+                        icon: 'info',
+                        confirmButtonText: 'OK',
+                        background: '#fff3cd',
+                        color: '#856404',
+                        confirmButtonColor: '#ffc107',
+                    });
+                }
+            })
+                .catch((error) => {
+                    // SweetAlert for error
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'An error occurred: ' + error.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        background: '#f8d7da',
+                        color: '#721c24',
+                        confirmButtonColor: '#dc3545',
+                    });
+                });
+        }
+
+        function update_DATA() {
+            update(ref(db, "TheNumber/" + SNO.value), {
+                sports_category: sports_category.value,
+                sports_Name: sports_Name.value,
+            })
+                .then(() => {
+                    // SweetAlert for update success
+                    Swal.fire({
+                        title: 'Updated!',
+                        text: 'Data was successfully updated.',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        background: '#d4edda',
+                        color: '#155724',
+                        confirmButtonColor: '#28a745',
+                    });
+                })
+                .catch((error) => {
+                    // SweetAlert for update error
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Data update failed.',
+                        icon: 'error',
+                        confirmButtonText: 'Try Again',
+                        background: '#f8d7da',
+                        color: '#721c24',
+                        confirmButtonColor: '#dc3545',
+                    });
+                });
+        }
+
+        function DELETED_DATA() {
+            remove(ref(db, "TheNumber/" + SNO.value))
+                .then(() => {
+                    // SweetAlert for delete success
+                    Swal.fire({
+                        title: 'Deleted!',
+                        text: 'Data was successfully deleted.',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        background: '#d4edda',
+                        color: '#155724',
+                        confirmButtonColor: '#28a745',
+                    });
+                })
+                .catch((error) => {
+                    // SweetAlert for delete error
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to delete data.',
+                        icon: 'error',
+                        confirmButtonText: 'Try Again',
+                        background: '#f8d7da',
+                        color: '#721c24',
+                        confirmButtonColor: '#dc3545',
+                    });
+                });
+        }
+
+        // --------------EVENTS-----------------
+        ADD.addEventListener('click', IN_DATA);
+        SELECT.addEventListener('click', select_data);
+        UPDATE.addEventListener('click', update_DATA);
+        DELETE.addEventListener('click', DELETED_DATA);
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,134 @@
+body {
+    font-family: Arial, sans-serif;
+    background: url(bg.png);
+}
+
+.imgg img {
+    position: fixed;
+    top: 0;
+    /* Positions the banner at the very top */
+    left: 0;
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: cover;
+    border-bottom: 5px solid #000
+}
+
+.container {
+    padding-top: 0px;
+    max-width: 1200px;
+    height: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 50px;
+    box-shadow: black;
+    padding-top: 100px;
+    padding-bottom: 100px;
+    border-color: #a2e8a2;
+    
+}
+
+.container h1 {
+    font-family: 'Arial', sans-serif;
+    font-size: 3rem;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    margin: 20px 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+a {
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.sports-form {
+    background-color: rgb(203, 237, 240);
+    border-radius: 5px;
+    padding: 20px;
+ 
+    height: 100%;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.btn {
+    background-color: gray;
+    text-align: center;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: black;
+}
+
+h1 {
+    border: black;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+input[type="email"],
+input[type="password"],
+button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #cb5ee6;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ce9adb;
+}
+
+#p_tag {
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: rgb(0, 179, 255);
+    line-height: 1.5;
+    text-align: center;
+    margin: 10px 0;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#a_tag {
+    font-size: 20px;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: #cb5ee6;
+    line-height: 1.5;
+    text-align: center;
+    margin: 10px 0;
+    padding: 5px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+
+}

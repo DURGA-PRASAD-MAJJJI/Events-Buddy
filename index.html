@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sports Buddy - Connect, Compete, and Celebrate Sports Events!">
+    <meta name="keywords" content="Sports, Events, Matches, Players, Competitions">
+    <meta name="author" content="Your Name">
+    
+    <title>Events Buddy</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="map.png">
+
+    <!-- FontAwesome for Icons -->
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous" defer></script>
+
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="USER/CSS.css">
+
+    <!-- Preload Important Assets for Faster Performance -->
+    <link rel="preload" href="style.css" as="style">
+    <link rel="preload" href="USER/CSS.css" as="style">
+</head>
+
+
+<body>
+    <div id="home">
+        <div class="firstPage">
+            <nav>
+                <ul id="sidemenu">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#sigin">Sigin</a></li>
+                    <li><a href="#Events">Events</a></li>
+                    <li><a href="#Contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div id="sigin">
+            <div class="container">
+                <h1>Events Buddy</h1>
+                <form id="registerForm">
+                    <a href="USER/Register.html" class="btn btnew">USER</a>
+                    <a href="ADMIN/login2.html" class="btn btnew">ADMIN</a>
+                </form>
+            </div>
+
+        </div>
+        <div id="Events">
+            <div class="sports">
+                <h1>Avalible Events Right Now</h1>
+                <iframe src="ADMIN/DATABASE.html" width="97%" height="500px">
+                </iframe>
+
+            </div>
+
+        </div>
+        <div id="Contact">
+            <div class="containe">
+                <div class="row">
+                    <div class="contact-left">
+                        <h1 class="sub-title">Contact</h1>
+                        <p><i class="fas fa-paper-plane"><a href=""></a></i>durgaprasadmajji65@gmail.com</p>
+                        <p><i class="fas fa-phone-square-alt"></i></i>6305015997</p>
+                        <div class="social-icons">
+                            <a href="https://www.linkedin.com/in/majji-durga-prasad-234a2b2a2/"><i
+                                    class="fab fa-linkedin"></i></a>
+                            <a href="https://github.com/DURGA-PRASAD-MAJJJI"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <div class="contact-right">
+                        <form name="submit-to-google-sheet">
+                            <input type="text" name="Name" placeholder="Your Name" required>
+                            <input type="text" name="Email" placeholder="Your Email " required>
+                            <textarea name="Message" rows="6" placeholder="Your Message"></textarea>
+                            <button type="submit" class="btn btnew">submit</button>
+                        </form>
+                        <span id="msg"></span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="copyrights">
+            <p>Events Buddy <span>@</span> Durga Prasad Majji</p>
+
+        </div>
+    </div>
+    <style>
+        #msg {
+            display: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 18px;
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-weight: bold;
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            0% {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxuTnkjTP_j_4JoAgzxrpQuDwrMJ9qaiBUVtss19XgsTtK-p9kMYC1W5DADwvfKFmA3/exec';
+        const form = document.forms['submit-to-google-sheet'];
+        const msg = document.getElementById("msg");
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+                .then(response => {
+                    msg.innerHTML = "🎉 Success! Your message has been sent! 🎉";
+                    msg.style.display = "block";
+                    setTimeout(function () {
+                        msg.style.display = "none";
+                    }, 3000);
+                    form.reset();
+                })
+                .catch(error => {
+                    msg.innerHTML = "❌ Something went wrong. Please try again!";
+                    msg.style.backgroundColor = "#F44336";
+                    msg.style.display = "block";
+                    setTimeout(function () {
+                        msg.style.display = "none";
+                    }, 5000);
+                    console.error('Error!', error.message);
+                });
+        });
+    </script>
+
+</body>
+
+
+</html>

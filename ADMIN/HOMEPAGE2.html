@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Buddy</title>
+    <link rel="icon" href="map.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="./CSS.css">
+    <link rel="stylesheet" href="home.css">
+</head>
+
+<body>
+    <div class="banner">
+        <img src="banner copy 2.png" alt="">
+    </div>
+    <div class="events-page">
+        <div class="sports-event">
+            <iframe src="DATABASE.html" width="100%" height="100%"></iframe>
+        </div>
+        <div class="sports-form">
+            <label for="SNO">Date
+                <input id="SNO" type="text" required>
+            </label>
+
+            <label for="sports_Name">Event Name
+                <input id="sports_Name" type="text" required>
+            </label>
+
+            <label for="sports_category">Event Category
+                <input id="sports_category" type="text">
+            </label>
+
+            <label for="CITY">CITY
+                <input id="CITY" type="text" required>
+            </label>
+
+            <label for="Area">Area
+                <input id="Area" type="text" required>
+            </label>
+
+            <hr>
+            <button id="ADD">ADD</button>
+            <button id="SELECT">SELECT</button>
+            <button id="UPDATE">UPDATE</button>
+            <button id="DELETE">DELETE</button>
+        </div>
+
+    </div>
+
+    <!-- SweetAlert2 Script -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script type="module">
+        // Import the functions you need from the SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+        import { getDatabase, ref, get, set, child, update, remove }
+            from "https://www.gstatic.com/firebasejs/10.12.1/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            // apiKey: "Enter your API key here",
+            authDomain: "sports-buddy-eab63.firebaseapp.com",
+            databaseURL: "https://sports-buddy-eab63-default-rtdb.firebaseio.com",
+            projectId: "sports-buddy-eab63",
+            storageBucket: "sports-buddy-eab63.appspot.com",
+            messagingSenderId: "49982895548",
+            appId: "1:49982895548:web:b7ad502f9177abc6bf67b9"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        var SNO = document.getElementById("SNO");
+        var sports_Name = document.getElementById("sports_Name");
+        var sports_category = document.getElementById("sports_category");
+        var CITY = document.getElementById("CITY");
+        var Area = document.getElementById("Area");
+
+        var ADD = document.getElementById("ADD");
+        var SELECT = document.getElementById("SELECT");
+        var UPDATE = document.getElementById("UPDATE");
+        var DELETE = document.getElementById("DELETE");
+
+        // --------------------------functions---------------
+        function IN_DATA() {
+            // Check if any field is empty
+            if (
+                SNO.value.trim() === "" ||
+                sports_Name.value.trim() === "" ||
+                sports_category.value.trim() === "" ||
+                CITY.value.trim() === "" ||
+                Area.value.trim() === ""
+            ) {
+                Swal.fire({
+                    title: "Warning!",
+                    text: "All fields are required!",
+                    icon: "warning",
+                    confirmButtonColor: "#ffa500"
+                });
+                return; // Stop execution if validation fails
+            }
+
+            // Store data in Firebase
+            set(ref(db, "TheNumber/" + SNO.value), {
+                SNO: SNO.value,
+                sports_Name: sports_Name.value,
+                sports_category: sports_category.value,
+                CITY: CITY.value,
+                Area: Area.value
+            })
+                .then(() => {
+                    Swal.fire({
+                        title: "Success!",
+                        text: "Data has been stored successfully.",
+                        icon: "success",
+                        confirmButtonColor: "#28a745"
+                    });
+
+                    // Optionally clear input fields after successful submission
+                    SNO.value = "";
+                    sports_Name.value = "";
+                    sports_category.value = "";
+                    CITY.value = "";
+                    Area.value = "";
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Failed to store data. " + error.message,
+                        icon: "error",
+                        confirmButtonColor: "#dc3545"
+                    });
+                });
+        }
+
+
+        function select_data() {
+            const dbRef = ref(db);
+            get(child(dbRef, "TheNumber/" + SNO.value)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    sports_Name.value = snapshot.val().sports_Name;
+                    sports_category.value = snapshot.val().sports_category;
+                    CITY.value = snapshot.val().CITY;
+                    Area.value = snapshot.val().Area;
+                } else {
+                    Swal.fire({
+                        title: 'Not Found!',
+                        text: 'No data found.',
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            })
+                .catch((error) => {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to retrieve data.',
+                        icon: 'error',
+                        confirmButtonText: 'Try Again'
+                    });
+                });
+        }
+
+        function update_DATA() {
+            update(ref(db, "TheNumber/" + SNO.value), {
+                sports_Name: sports_Name.value,
+                sports_category: sports_category.value,
+                CITY: CITY.value,
+                Area: Area.value
+            })
+                .then(() => {
+                    Swal.fire({
+                        title: 'Updated!',
+                        text: 'Data was successfully updated.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to update data.',
+                        icon: 'error',
+                        confirmButtonText: 'Try Again'
+                    });
+                });
+        }
+
+        function DELETED_DATA() {
+            remove(ref(db, "TheNumber/" + SNO.value))
+                .then(() => {
+                    Swal.fire({
+                        title: 'Deleted!',
+                        text: 'Data was successfully deleted.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to delete data.',
+                        icon: 'error',
+                        confirmButtonText: 'Try Again'
+                    });
+                });
+        }
+
+        // --------------EVENTS-----------------
+        ADD.addEventListener('click', IN_DATA);
+        SELECT.addEventListener('click', select_data);
+        UPDATE.addEventListener('click', update_DATA);
+        DELETE.addEventListener('click', DELETED_DATA);
+    </script>
+</body>
+
+</html>
